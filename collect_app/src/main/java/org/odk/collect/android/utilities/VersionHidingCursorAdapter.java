@@ -65,7 +65,6 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                         if (id != null) {
                             v.append(String.format(ctxt.getString(R.string.id_number), id));
                             v.setVisibility(View.VISIBLE);
-
                         } else {
                             v.append("");
                         }
