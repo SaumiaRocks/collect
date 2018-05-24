@@ -1,21 +1,9 @@
 version: 2
-
-
-
 references:
-
-
-
   ## Cache
-
-
-
   cache_key: &cache_key
-
     key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
-
   restore_cache: &restore_cache
-
     restore_cache:
 
       <<: *cache_key
@@ -39,6 +27,21 @@ references:
       name: Accept licenses
 
       command: sdkmanager --update && yes | sdkmanager --licenses
+
+
+dependencies:
+  override:
+    - echo y | android update sdk --no-ui --all --filter build-tools-27.0.3,android-27
+
+
+update_sdk: &update_sdk
+  name: Update SDK
+  command: |
+    mkdir -p "$ANDROID_HOME/licenses" || 
+    echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_SDK/licenses/android-sdk-license"
+    echo -e "\nd56f5187479451eabf01fb78af6dfcb131a6481e" >> "$ANDROID_SDK/licenses/android-    sdk-license"
+    echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" >>"$ANDROID_SDK/licenses/android-sdk-preview-license"
+    sdkmanager "platform-tools" "platforms;android-27"
 
 
 
