@@ -38,7 +38,7 @@ references:
 
       name: Accept licenses
 
-      command: yes | sdkmanager --licenses || true
+      command: sdkmanager --update && yes | sdkmanager --licenses
 
 
 
@@ -295,6 +295,11 @@ jobs:
   report_coverage:
 
     <<: *android_config
+
+dependencies:
+  override:
+    - echo y | android update sdk --no-ui --all --filter build-tools-27.0.3,android-27
+
 
     steps:
 
