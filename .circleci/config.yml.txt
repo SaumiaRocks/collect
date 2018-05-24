@@ -299,9 +299,6 @@ jobs:
 
     <<: *android_config
 
-dependencies:
-  override:
-    - echo y | android update sdk --no-ui --all --filter build-tools-27.0.3,android-27
 
 
     steps:
@@ -315,6 +312,10 @@ dependencies:
           name: Download dependencies
 
           command: ./gradlew androidDependencies
+
+	dependencies:
+  	override:
+    	- echo y | android update sdk --no-ui --all --filter build-tools-27.0.3,android-27
 
       - *attach_debug_workspace
 
