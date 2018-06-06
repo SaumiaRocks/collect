@@ -1971,7 +1971,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (formController != null && formController.getInstanceFile() != null) {
             SaveToDiskTask.removeSavepointFiles(formController.getInstanceFile().getName());
 
-                  // if it's not already saved, erase everything
+            // if it's not already saved, erase everything
             if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
                 // delete media first
                 String instanceFolder = formController.getInstanceFile().getParent();
@@ -1986,7 +1986,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FileUtils.purgeMediaPath(instanceFolder);
             }
         }
-        
+
     }
 
     private String getAbsoluteInstancePath() {
