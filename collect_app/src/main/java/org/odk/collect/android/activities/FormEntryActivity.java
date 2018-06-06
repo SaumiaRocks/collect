@@ -1986,7 +1986,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 FileUtils.purgeMediaPath(instanceFolder);
             }
         }
-
     }
 
     private String getAbsoluteInstancePath() {
