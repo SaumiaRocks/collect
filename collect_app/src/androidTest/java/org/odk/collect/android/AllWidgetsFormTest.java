@@ -13,13 +13,11 @@ import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.BoundedMatcher;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -1005,26 +1003,6 @@ public class AllWidgetsFormTest {
             @Override
             public Matcher<View> getConstraints() {
                 return isAssignableFrom(SeekBar.class);
-            }
-        };
-    }
-
-    public static ViewAction setTextInTextView(final String value){
-        return new ViewAction() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public Matcher<View> getConstraints() {
-                return allOf(isDisplayed(), isAssignableFrom(TextView.class));
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                ((TextView) view).setText(value);
-            }
-
-            @Override
-            public String getDescription() {
-                return "replace text";
             }
         };
     }
