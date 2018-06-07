@@ -19,6 +19,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -63,6 +64,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAct
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
+import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
@@ -589,6 +591,7 @@ public class AllWidgetsFormTest {
         onView(withText("Select value")).perform(click());
 
         onVisibleNumberPickerDialog().perform(setNumberPickerValue(randomValue));
+        onView(withText("OK")).perform(click());
 
         Screengrab.screenshot("Range-picker-integer-widget");
 
@@ -1001,7 +1004,27 @@ public class AllWidgetsFormTest {
 
             @Override
             public Matcher<View> getConstraints() {
-                return ViewMatchers.isAssignableFrom(SeekBar.class);
+                return isAssignableFrom(SeekBar.class);
+            }
+        };
+    }
+
+    public static ViewAction setTextInTextView(final String value){
+        return new ViewAction() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public Matcher<View> getConstraints() {
+                return allOf(isDisplayed(), isAssignableFrom(TextView.class));
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                ((TextView) view).setText(value);
+            }
+
+            @Override
+            public String getDescription() {
+                return "replace text";
             }
         };
     }
@@ -1021,7 +1044,7 @@ public class AllWidgetsFormTest {
 
             @Override
             public Matcher<View> getConstraints() {
-                return ViewMatchers.isAssignableFrom(NumberPicker.class);
+                return isAssignableFrom(NumberPicker.class);
             }
         };
     }
@@ -1035,7 +1058,7 @@ public class AllWidgetsFormTest {
     }
 
     private ViewInteraction onVisibleTextView() {
-        return onView(withClassName(endsWith("TextView")));
+        return onView(withId(R.id.answer_text));
     }
 
     private ViewInteraction onVisibleCheckBox() {
