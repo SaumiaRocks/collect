@@ -18,6 +18,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -69,8 +70,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
@@ -585,10 +588,11 @@ public class AllWidgetsFormTest {
 
     public void testRangePickerIntegerWidget() {
 
-        int randomValue = randomInt() % 8;
+        String randomIntegerString = randomIntegerString();
+
         onView(withText("Select value")).perform(click());
 
-        onVisibleNumberPickerDialog().perform(setNumberPickerValue(randomValue));
+        onVisibleNumberPickerDialog().perform(setNumberPickerValue(Integer.parseInt(randomIntegerString)));
         onView(withText("OK")).perform(click());
 
         Screengrab.screenshot("Range-picker-integer-widget");
@@ -596,7 +600,9 @@ public class AllWidgetsFormTest {
         openWidgetList();
         onView(withText("Range picker integer widget")).perform(click());
 
-        onVisibleTextView().check(matches(withText(randomValue)));
+        onView(withText("Edit value")).perform(click());
+        onVisibleCustomEditText().check(matches(isDisplayed()));
+        onView(withText("OK")).perform(click());
 
         onView(withText("Range picker integer widget")).perform(swipeLeft());
 
@@ -1035,8 +1041,8 @@ public class AllWidgetsFormTest {
         return onView(withClassName(endsWith("EditText")));
     }
 
-    private ViewInteraction onVisibleTextView() {
-        return onView(withId(R.id.answer_text));
+    private ViewInteraction onVisibleCustomEditText() {
+        return onView(withClassName(endsWith("CustomEditText")));
     }
 
     private ViewInteraction onVisibleCheckBox() {
