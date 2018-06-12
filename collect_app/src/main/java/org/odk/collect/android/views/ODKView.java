@@ -66,6 +66,8 @@ import java.util.Set;
 
 import timber.log.Timber;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.KITKAT;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -486,7 +488,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
                 ValueAnimator va = new ValueAnimator();
 
-                if (VERSION.SDK_INT > VERSION_CODES.KITKAT) {
+                if (SDK_INT > KITKAT) {
                     // only for kitkat and newer versions
                     va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
                 } else {
