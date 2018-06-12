@@ -21,6 +21,9 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+//import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -480,8 +483,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 scrollTo(0, qw.getTop());
 
                 ValueAnimator va = new ValueAnimator();
-
-                if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.KITKAT) {
+/*
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                     // only for kitkat and newer versions
                     va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
                 } else {
@@ -492,7 +495,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                         va.setIntValues(getResources().getColor(R.color.red), a.data);
                     } else
                         va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
-                }
+                }*/
+                va.setIntValues(getResources().getColor(R.color.red), getDrawingCacheBackgroundColor());
 
                 va.setEvaluator(new ArgbEvaluator());
                 va.addUpdateListener(valueAnimator -> qw.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
