@@ -34,8 +34,6 @@ import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobManagerCreateException;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -228,7 +226,6 @@ public class Collect extends Application {
         }
 
         setupRemoteAnalytics();
-        setupLeakCanary();
         setupOSMDroid();
 
         // Force inclusion of scoped storage strings so they can be translated
@@ -252,13 +249,6 @@ public class Collect extends Application {
                 .build();
 
         applicationComponent.inject(this);
-    }
-
-    protected RefWatcher setupLeakCanary() {
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return RefWatcher.DISABLED;
-        }
-        return LeakCanary.install(this);
     }
 
     @Override
