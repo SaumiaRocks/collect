@@ -38,7 +38,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.SoftKeyboardUtils;
 
 import timber.log.Timber;
@@ -51,7 +50,6 @@ public class StringWidget extends QuestionWidget {
 
     private boolean readOnly;
     public TextInputEditText answerText;
-//    public EditText answerText;
 
     public StringWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
         super(context, questionDetails);
@@ -66,10 +64,14 @@ public class StringWidget extends QuestionWidget {
         answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         answerText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
 
+        answerText.setText(prompt.getAnswerText());
+
         // needed to make long read only text scroll
         answerText.setHorizontallyScrolling(false);
         answerText.setSingleLine(false);
 
+        // for testing purpose
+        readOnly = readOnly || prompt.isReadOnly();
         if (readOnly) {
             answerText.setBackground(null);
             answerText.setEnabled(false);
@@ -123,7 +125,6 @@ public class StringWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         answerText.setText(null);
-        widgetValueChanged();
     }
 
     @Override
@@ -187,5 +188,9 @@ public class StringWidget extends QuestionWidget {
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
             widgetValueChanged();
         }
+    }
+
+    public TextInputEditText getEditText() {
+        return answerText;
     }
 }
