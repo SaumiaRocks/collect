@@ -108,6 +108,7 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
         getComponent(context).inject(this);
     }
 
+/*
     @Override
     protected void setUpLayout(Context context) {
         answerText.setText(getFormEntryPrompt().getAnswerText());
@@ -119,6 +120,7 @@ public class ExStringWidget extends StringWidget implements BinaryWidget {
         answerLayout.addView(answerText);
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
     }
+*/
 
     private String getButtonText() {
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");

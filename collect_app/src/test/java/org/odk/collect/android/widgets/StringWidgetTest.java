@@ -5,23 +5,15 @@ import androidx.annotation.NonNull;
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
+import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.base.GeneralStringWidgetTest;
+import org.robolectric.RobolectricTestRunner;
 
 /**
  * @author James Knight
  */
-public class StringWidgetTest extends GeneralStringWidgetTest<StringWidget, StringData> {
+@RunWith(RobolectricTestRunner.class)
+public class StringWidgetTest {
 
-    @NonNull
-    @Override
-    public StringWidget createWidget() {
-        return new StringWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false);
-    }
 
-    @NonNull
-    @Override
-    public StringData getNextAnswer() {
-        return new StringData(RandomString.make());
-    }
 }

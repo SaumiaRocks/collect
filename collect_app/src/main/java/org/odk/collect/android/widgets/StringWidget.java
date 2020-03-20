@@ -22,15 +22,20 @@ import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -44,25 +49,81 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class StringWidget extends QuestionWidget {
 
-    boolean readOnly;
-    public final EditText answerText;
+    private boolean readOnly;
+    public TextInputEditText answerText;
+//    public EditText answerText;
 
-    protected StringWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
+    public StringWidget(Context context, QuestionDetails questionDetails, boolean readOnlyOverride) {
         super(context, questionDetails);
-
         readOnly = questionDetails.getPrompt().isReadOnly() || readOnlyOverride;
-        answerText = getAnswerEditText(readOnly, getFormEntryPrompt());
-        setUpLayout(context);
     }
 
-    protected void setUpLayout(Context context) {
-        setDisplayValueFromModel();
-        addAnswerView(answerText, WidgetViewUtils.getStandardMargin(context));
+    @Override
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+        ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.string_widget_answer, null);
+
+        answerText = answerView.findViewById(R.id.inputTextField);
+        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        answerText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
+
+        // needed to make long read only text scroll
+        answerText.setHorizontallyScrolling(false);
+        answerText.setSingleLine(false);
+
+        if (readOnly) {
+            answerText.setBackground(null);
+            answerText.setEnabled(false);
+            answerText.setTextColor(themeUtils.getColorOnSurface());
+            answerText.setFocusable(false);
+        }
+
+        answerText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                widgetValueChanged();
+            }
+        });
+
+        QuestionDef questionDef = prompt.getQuestion();
+        if (questionDef != null) {
+            /*
+             * If a 'rows' attribute is on the input tag, set the minimum number of lines
+             * to display in the field to that value.
+             *
+             * I.e.,
+             * <input ref="foo" rows="5">
+             *   ...
+             * </input>
+             *
+             * will set the height of the EditText box to 5 rows high.
+             */
+            String height = questionDef.getAdditionalAttribute(null, "rows");
+            if (height != null && height.length() != 0) {
+                try {
+                    int rows = Integer.parseInt(height);
+                    answerText.setMinLines(rows);
+                    answerText.setGravity(Gravity.TOP); // to write test starting at the top of the edit area
+                } catch (Exception e) {
+                    Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
+                }
+            }
+        }
+
+        return answerView;
     }
 
     @Override
     public void clearAnswer() {
         answerText.setText(null);
+        widgetValueChanged();
     }
 
     @Override
@@ -124,68 +185,7 @@ public class StringWidget extends QuestionWidget {
         if (currentAnswer != null) {
             answerText.setText(currentAnswer);
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+            widgetValueChanged();
         }
-    }
-
-    private EditText getAnswerEditText(boolean readOnly, FormEntryPrompt prompt) {
-        EditText answerEditText = new EditText(getContext());
-        answerEditText.setId(View.generateViewId());
-        answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
-        answerEditText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
-
-        // needed to make long read only text scroll
-        answerEditText.setHorizontallyScrolling(false);
-        answerEditText.setSingleLine(false);
-
-        if (readOnly) {
-            answerEditText.setBackground(null);
-            answerEditText.setEnabled(false);
-            answerEditText.setTextColor(themeUtils.getColorOnSurface());
-            answerEditText.setFocusable(false);
-        }
-
-        answerEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                widgetValueChanged();
-            }
-        });
-
-        QuestionDef questionDef = prompt.getQuestion();
-        if (questionDef != null) {
-            /*
-             * If a 'rows' attribute is on the input tag, set the minimum number of lines
-             * to display in the field to that value.
-             *
-             * I.e.,
-             * <input ref="foo" rows="5">
-             *   ...
-             * </input>
-             *
-             * will set the height of the EditText box to 5 rows high.
-             */
-            String height = questionDef.getAdditionalAttribute(null, "rows");
-            if (height != null && height.length() != 0) {
-                try {
-                    int rows = Integer.parseInt(height);
-                    answerEditText.setMinLines(rows);
-                    answerEditText.setGravity(Gravity.TOP); // to write test starting at the top of the edit area
-                } catch (Exception e) {
-                    Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
-                }
-            }
-        }
-
-        return answerEditText;
     }
 }

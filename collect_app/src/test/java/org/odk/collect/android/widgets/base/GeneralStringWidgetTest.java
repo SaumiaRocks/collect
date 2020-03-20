@@ -33,7 +33,7 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
         super.callingClearShouldRemoveTheExistingAnswer();
 
         W widget = getWidget();
-        assertEquals(widget.getAnswerText(), "");
+        assertEquals(widget.getAnswerText(), null);
     }
 
     @Override
