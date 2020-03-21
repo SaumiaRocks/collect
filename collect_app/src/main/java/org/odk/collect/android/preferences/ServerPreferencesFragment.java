@@ -20,6 +20,7 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.telephony.PhoneNumberUtils;
@@ -261,6 +262,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     public void initAccountPreferences() {
+
         selectedGoogleAccountPreference.setSummary(accountsManager.getLastSelectedAccountIfValid());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(preference -> {
             if (allowClickSelectedGoogleAccountPreference) {
@@ -459,6 +461,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     accountsManager.selectAccount(accountName);
+                    getActivity().setTheme(R.style.Theme_Collect_Light);
                     selectedGoogleAccountPreference.setSummary(accountName);
                 }
                 allowClickSelectedGoogleAccountPreference = true;

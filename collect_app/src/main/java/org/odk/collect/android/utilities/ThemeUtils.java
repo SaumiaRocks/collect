@@ -86,7 +86,7 @@ public final class ThemeUtils {
     }
 
     public int getAccountPickerTheme() {
-        return isDarkTheme() ? 0 : 1;
+        return isDarkTheme() ? 1 : 0;
     }
 
     public boolean isDarkTheme() {

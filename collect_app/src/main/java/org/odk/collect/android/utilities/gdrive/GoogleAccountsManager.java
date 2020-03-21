@@ -81,6 +81,8 @@ public class GoogleAccountsManager {
     private void initCredential(@NonNull Context context) {
         this.context = context;
 
+        this.context.setTheme(R.style.Theme_Collect_Light);
+
         transport = AndroidHttp.newCompatibleTransport();
         jsonFactory = JacksonFactory.getDefaultInstance();
         preferences = GeneralSharedPreferences.getInstance();
@@ -90,6 +92,8 @@ public class GoogleAccountsManager {
                 .setBackOff(new ExponentialBackOff());
 
         intentChooseAccount = credential.newChooseAccountIntent();
+        intentChooseAccount.putExtra("overrideTheme", 1);
+        intentChooseAccount.putExtra("overrideCustomTheme", 1);
         themeUtils = new ThemeUtils(context);
     }
 
@@ -179,9 +183,10 @@ public class GoogleAccountsManager {
 
     public Intent getAccountChooserIntent() {
         Account selectedAccount = getAccountPickerCurrentAccount();
+
         intentChooseAccount.putExtra("selectedAccount", selectedAccount);
-        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
-        intentChooseAccount.putExtra("overrideCustomTheme", 0);
+//        intentChooseAccount.putExtra("overrideTheme", 1);
+//        intentChooseAccount.putExtra("overrideCustomTheme", 1);
         return intentChooseAccount;
     }
 }
