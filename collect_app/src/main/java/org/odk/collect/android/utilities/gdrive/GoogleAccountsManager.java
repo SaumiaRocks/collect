@@ -48,6 +48,8 @@ import java.util.Collections;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class GoogleAccountsManager {
@@ -89,7 +91,7 @@ public class GoogleAccountsManager {
     private void initCredential(@NonNull Context context) {
         this.context = context;
 
-        this.context.setTheme(R.style.Theme_Collect_Light);
+//        this.context.setTheme(R.style.Theme_Collect_Light);
 
         transport = AndroidHttp.newCompatibleTransport();
         jsonFactory = JacksonFactory.getDefaultInstance();
@@ -99,13 +101,11 @@ public class GoogleAccountsManager {
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff());
 
-
-        intentChooseAccount = credential.newChooseAccountIntent();
+//        intentChooseAccount = credential.newChooseAccountIntent();
         intentChooseAccount = AccountManager.newChooseAccountIntent(null, null, new String[] {GoogleAccountManager.ACCOUNT_TYPE}, null,
                 null, null, null);
-//        intentChooseAccount = AccountPicker.zza(null, null,         new String[] {GoogleAccountManager.ACCOUNT_TYPE}, false, null, null, null, null, false, 1, 0);
-        intentChooseAccount.putExtra("overrideTheme", 1);
-        intentChooseAccount.putExtra("overrideCustomTheme", 1);
+//        intentChooseAccount.putExtra("overrideTheme", 1);
+//        intentChooseAccount.putExtra("overrideCustomTheme", 1);
         themeUtils = new ThemeUtils(context);
     }
 
@@ -197,8 +197,9 @@ public class GoogleAccountsManager {
         Account selectedAccount = getAccountPickerCurrentAccount();
 
         intentChooseAccount.putExtra("selectedAccount", selectedAccount);
-//        intentChooseAccount.putExtra("overrideTheme", 1);
-//        intentChooseAccount.putExtra("overrideCustomTheme", 1);
+        intentChooseAccount.putExtra("overrideTheme", themeUtils.getAccountPickerTheme());
+//        Timber.d("Testing: theme vslue = " + themeUtils.getAccountPickerTheme());
+//        intentChooseAccount.putExtra("overrideCustomTheme", 0);
         return intentChooseAccount;
     }
 }
