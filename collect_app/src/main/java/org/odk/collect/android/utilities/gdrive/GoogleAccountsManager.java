@@ -15,16 +15,22 @@
 package org.odk.collect.android.utilities.gdrive;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.accounts.GoogleAccountManager;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -59,6 +65,7 @@ public class GoogleAccountsManager {
     private GeneralSharedPreferences preferences;
     private ThemeUtils themeUtils;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Inject
     public GoogleAccountsManager(@NonNull Context context) {
         initCredential(context);
@@ -78,6 +85,7 @@ public class GoogleAccountsManager {
         this.themeUtils = themeUtils;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initCredential(@NonNull Context context) {
         this.context = context;
 
@@ -91,7 +99,11 @@ public class GoogleAccountsManager {
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff());
 
+
         intentChooseAccount = credential.newChooseAccountIntent();
+        intentChooseAccount = AccountManager.newChooseAccountIntent(null, null, new String[] {GoogleAccountManager.ACCOUNT_TYPE}, null,
+                null, null, null);
+//        intentChooseAccount = AccountPicker.zza(null, null,         new String[] {GoogleAccountManager.ACCOUNT_TYPE}, false, null, null, null, null, false, 1, 0);
         intentChooseAccount.putExtra("overrideTheme", 1);
         intentChooseAccount.putExtra("overrideCustomTheme", 1);
         themeUtils = new ThemeUtils(context);
