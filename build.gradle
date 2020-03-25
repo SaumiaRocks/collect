@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.spotbugs' version '4.0.4s'
+    id 'com.github.spotbugs' version '1.6.4'
 }
 
 allprojects {
