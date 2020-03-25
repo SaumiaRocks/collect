@@ -15,6 +15,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.github.spotbugs' version '4.0.4s'
+}
+
 allprojects {
     repositories {
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
@@ -39,7 +43,7 @@ task checkAll(type: GradleBuild) {
 }
 
 task checkCode(type: GradleBuild) {
-    tasks = ['pmd', 'checkstyle', 'lintDebug']
+    tasks = ['pmd', 'checkstyle', 'lintDebug', 'spotbugs']
 }
 
 task checkTests(type: GradleBuild) {
