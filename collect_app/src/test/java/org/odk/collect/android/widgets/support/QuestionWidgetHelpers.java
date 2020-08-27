@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.support;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.fakes.FakePermissionUtils;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.RobolectricHelpers;
@@ -24,6 +25,11 @@ public class QuestionWidgetHelpers {
         WidgetValueChangedListener valueChangedListener = mock(WidgetValueChangedListener.class);
         widget.setValueChangedListener(valueChangedListener);
         return valueChangedListener;
+    }
+
+    public static void stubLocationPermissions(FakePermissionUtils permissionUtils, QuestionWidget widget, boolean isGranted) {
+        permissionUtils.setPermissionGranted(isGranted);
+        widget.setPermissionUtils(permissionUtils);
     }
 
     public static FormEntryPrompt promptWithAnswer(IAnswerData answer) {
