@@ -25,6 +25,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.utilities.PermissionUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.WidgetAppearanceUtils;
 import org.odk.collect.android.widgets.items.ItemsetWidget;
@@ -70,6 +71,7 @@ public class WidgetFactory {
 
         String appearance = WidgetAppearanceUtils.getSanitizedAppearanceHint(prompt);
         QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash());
+        PermissionUtils permissionUtils = new PermissionUtils();
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {
@@ -103,17 +105,20 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_GEOPOINT:
                         if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP) || hasAppearance(questionDetails.getPrompt(), MAPS)) {
-                            questionWidget = new GeoPointMapWidget(context, questionDetails, waitingForDataRegistry, new ActivityGeoDataRequester());
+                            questionWidget = new GeoPointMapWidget(context, questionDetails, waitingForDataRegistry,
+                                    new ActivityGeoDataRequester(permissionUtils));
                         } else {
-                            questionWidget = new GeoPointWidget(context, questionDetails, waitingForDataRegistry, new ActivityGeoDataRequester());
+                            questionWidget = new GeoPointWidget(context, questionDetails, waitingForDataRegistry,
+                                    new ActivityGeoDataRequester(permissionUtils));
                         }
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
-                        questionWidget = new GeoShapeWidget(context, questionDetails, waitingForDataRegistry, new ActivityGeoDataRequester());
+                        questionWidget = new GeoShapeWidget(context, questionDetails, waitingForDataRegistry,
+                                new ActivityGeoDataRequester(permissionUtils));
                         break;
                     case Constants.DATATYPE_GEOTRACE:
                         questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry,
-                                MapProvider.getConfigurator(), new ActivityGeoDataRequester());
+                                MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionUtils));
                         break;
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(context, questionDetails, waitingForDataRegistry, new CameraUtils());
